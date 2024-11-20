@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { Suspense } from "react";
 import { privateRoutes, publicRoutes } from "./routes";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
