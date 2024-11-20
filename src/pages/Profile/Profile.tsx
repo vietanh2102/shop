@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { userApiPrivate } from "../../axios/userApi";
+import Loading from "../../components/Loading/Loading";
 
 function Profile() {
   const [profile, setProfile] = useState();
@@ -20,7 +21,10 @@ function Profile() {
     };
     getUser();
   }, []);
-  return <></>;
+  if (loading) {
+    return <Loading />;
+  }
+  return <>{profile}</>;
 }
 
 export default Profile;
