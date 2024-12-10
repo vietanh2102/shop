@@ -15,10 +15,8 @@ function Login() {
       await userApi
         .post(`login`, value)
         .then((res) => {
+          console.log(res);
           if (res.data) {
-            localStorage.setItem("token", res.data.data.access_token);
-            localStorage.setItem("id", res.data.data.user._id);
-            localStorage.setItem("email", res.data.data.user.email);
             const user = {
               id: res.data.data.user._id,
               email: res.data.data.user.email,

@@ -1,8 +1,12 @@
 import { lazy } from "react";
 
-interface RouteType {
+export interface RouteType {
   path: string;
   component: React.LazyExoticComponent<() => JSX.Element>;
+  isAuthRoute?: boolean;
+  isPrivateRoute?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  layout?: any;
 }
 const Home = lazy(() => import("../pages/Home/Home"));
 const ProductsPage = lazy(() => import("../pages/ProductsPage/ProductsPage"));
@@ -17,18 +21,16 @@ const PayPage = lazy(() => import("../pages/PayPage/PayPage"));
 const Login = lazy(() => import("../pages/Login/Login"));
 const Register = lazy(() => import("../pages/Register/Register"));
 
-const publicRoutes: RouteType[] = [
+const routes: RouteType[] = [
   { path: "/", component: Home },
   { path: `/products/:param`, component: ProductsPage },
   { path: `/filter/:param`, component: Filter },
   { path: `/product/:id`, component: DetailProduct },
   { path: "/contact", component: ContactPage },
   { path: "/about", component: AboutUs },
-  { path: "/login", component: Login },
-  { path: "/register", component: Register },
+  { path: "/login", component: Login, isAuthRoute: true },
+  { path: "/register", component: Register, isAuthRoute: true },
+  { path: "/pay", component: PayPage, isPrivateRoute: true },
+  { path: "/profile", component: Profile, isPrivateRoute: true },
 ];
-const privateRoutes: RouteType[] = [
-  { path: "/pay", component: PayPage },
-  { path: "/profile", component: Profile },
-];
-export { publicRoutes, privateRoutes };
+export { routes };

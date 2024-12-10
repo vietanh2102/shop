@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { ProductType } from "../../types";
+import { orderInfo, ProductType } from "../../types";
 interface GetProductType {
   products: ProductType[];
   totalPage: number;
@@ -11,7 +11,9 @@ interface GetProductCategory {
 }
 export const ProductApi = createApi({
   reducerPath: "news",
-  baseQuery: fetchBaseQuery({ baseUrl: `https://zrnvxy-8080.csb.app/` }),
+  // https://zrnvxy-8080.csb.app/
+  // https://yymyxn-8080.csb.app/
+  baseQuery: fetchBaseQuery({ baseUrl: `https://yymyxn-8080.csb.app/` }),
   endpoints: (builder) => ({
     getProducts: builder.query<
       GetProductType,
@@ -53,6 +55,16 @@ export const ProductApi = createApi({
         };
       },
     }),
+    getCartUser: builder.query<orderInfo[], string | number>({
+      query: (id) => `orders?userId=${id}`,
+    }),
+    orders: builder.mutation({
+      query: (postData) => ({
+        url: "orders", // The endpoint to which the POST request is made
+        method: "POST", // Specify the HTTP method
+        body: postData, // Data you want to send in the body of the request
+      }),
+    }),
   }),
 });
 export const {
@@ -61,4 +73,6 @@ export const {
   useGetProductsCategoryQuery,
   useSearchProductQuery,
   useGetProductsDetailQuery,
+  useOrdersMutation,
+  useGetCartUserQuery,
 } = ProductApi;

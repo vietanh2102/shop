@@ -46,7 +46,7 @@ function Header() {
 
   const userItems: MenuProps["items"] = [
     {
-      label: <Link to={"/profile"}> {user.user.email}</Link>,
+      label: <Link to={"/profile"}> Profile</Link>,
       key: "profile",
     },
     {
@@ -61,6 +61,7 @@ function Header() {
   ];
   const handleCLickPay = () => {
     setOpenDrawer(false);
+    nav("/pay");
   };
   const onClick: MenuProps["onClick"] = ({ key }) => {
     if (key === "logout") {

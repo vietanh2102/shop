@@ -8,6 +8,18 @@ export interface ProductType {
   id: number;
   size: string[];
 }
+
+export interface orderInfo {
+  id: number;
+  userId: string;
+  email: string;
+  name: string;
+  phone: string;
+  address: string;
+  orderAt: string;
+  status: string;
+  carts: CartType[];
+}
 export interface CartType extends Omit<ProductType, "size"> {
   quantity: number;
   size: string;
@@ -15,6 +27,7 @@ export interface CartType extends Omit<ProductType, "size"> {
 }
 export interface RegisterType {
   email: string;
+  name: string;
   password: string;
   confirmPassword: string;
 }

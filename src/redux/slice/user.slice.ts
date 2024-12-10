@@ -21,6 +21,9 @@ export const userSlice = createSlice({
   reducers: {
     loginUser(state, action: PayloadAction<User>) {
       state.user = action.payload;
+      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("id", String(action.payload.id));
+      localStorage.setItem("email", action.payload.email);
     },
     logoutUser(state, action: PayloadAction<User>) {
       state.user = action.payload;

@@ -41,6 +41,9 @@ function Register() {
         >
           <Input size="large" placeholder="Enter your Email" />
         </Form.Item>
+        <Form.Item name="name" label="Name" hasFeedback>
+          <Input size="large" placeholder="Enter your Name" />
+        </Form.Item>
         <Form.Item
           name="password"
           label="Password"

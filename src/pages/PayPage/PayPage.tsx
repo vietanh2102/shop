@@ -1,84 +1,43 @@
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { Button, Flex, Form, Input, message, Table, TableProps } from "antd";
+import { Button, Flex, Form, Input, message, Table } from "antd";
 import { CartType, RegisterType } from "../../types";
 import { rules } from "../../rules";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHook";
-import instance from "../../axios/api";
 import { removeAllItems } from "../../redux/slice/carts.slice";
-import { useEffect } from "react";
+import { useOrdersMutation } from "../../redux/service/product.service";
+import { columns } from "../../components/ColumnsTable/ColumnsTable";
 
 function PayPage() {
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await instance.get(`orders`);
-        console.log(response);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    })();
-  }, []);
-
   const cart = useAppSelector((state) => state.carts);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const [Order] = useOrdersMutation();
   const totalPrice = cart.cart.reduce((accumulator, currentValue) => {
     return accumulator + currentValue.quantity * currentValue.price;
   }, 0);
   const [form] = Form.useForm();
+
   const handleClickOrder = async (
     value: Omit<RegisterType, "password" | "confirmPassword">
   ) => {
     const orderInfo = {
       userId: user.user.id,
-      cartInfo: {
-        info: value,
-        orderAt: new Date().toDateString(),
-      },
+      ...value,
+      orderAt: new Date().toLocaleDateString("pt-PT"),
+      status: "processing",
       carts: cart.cart,
     };
-    await instance
-      .post(`orders`, orderInfo)
-      .then((res) => {
-        console.log(res);
-        if (res.data) {
-          message.success("Order successful");
-          form.resetFields();
-          dispatch(removeAllItems());
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        message.error("Try again");
-      });
+    try {
+      await Order(orderInfo).unwrap();
+      message.success("Order successful");
+      form.resetFields();
+      dispatch(removeAllItems());
+    } catch (err) {
+      message.error("Try again");
+      console.error("Failed to save the post: ", err);
+    }
   };
 
-  const columns: TableProps<CartType>["columns"] = [
-    {
-      title: "Product",
-      dataIndex: "image",
-      key: "image",
-      render: (src: string[]) => <img src={src[0]} alt="img" />,
-      width: 150,
-    },
-    {
-      title: "",
-      dataIndex: "title",
-      key: "title",
-      render: (text: string[]) => <p className="text-left">{text}</p>,
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
-    {
-      title: "Total",
-      dataIndex: "total",
-      key: "total",
-      render: (text: number) => <p>{text.toLocaleString()}đ</p>,
-    },
-  ];
   return (
     <div className="max-w-[1170px] mx-auto px-8 lg:px-0">
       <div className="flex text-[38px] my-6">
