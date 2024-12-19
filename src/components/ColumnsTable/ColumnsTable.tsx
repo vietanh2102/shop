@@ -1,5 +1,5 @@
 import { TableProps, Tag } from "antd";
-import { CartType, orderInfo } from "../../types";
+import { CartType, OrderInfo } from "../../types";
 
 export const statusOrder = {
   success: "success",
@@ -37,7 +37,7 @@ export const columns: TableProps<CartType>["columns"] = [
     render: (text: number) => <p>{text.toLocaleString()}đ</p>,
   },
 ];
-export const columnsOrders: TableProps<orderInfo>["columns"] = [
+export const columnsOrders: TableProps<OrderInfo>["columns"] = [
   {
     title: "Name",
     dataIndex: "name",

@@ -6,15 +6,19 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxHook";
 import { removeAllItems } from "../../redux/slice/carts.slice";
 import { useOrdersMutation } from "../../redux/service/product.service";
 import { columns } from "../../components/ColumnsTable/ColumnsTable";
+import { useMemo } from "react";
 
 function PayPage() {
   const cart = useAppSelector((state) => state.carts);
   const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const [Order] = useOrdersMutation();
-  const totalPrice = cart.cart.reduce((accumulator, currentValue) => {
-    return accumulator + currentValue.quantity * currentValue.price;
-  }, 0);
+  const totalPrice = useMemo(() => {
+    const totalPrice = cart.cart.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue.quantity * currentValue.price;
+    }, 0);
+    return totalPrice;
+  }, [cart.cart]);
   const [form] = Form.useForm();
 
   const handleClickOrder = async (

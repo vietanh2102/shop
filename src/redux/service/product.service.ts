@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { orderInfo, ProductType } from "../../types";
+import { OrderInfo, ProductType } from "../../types";
 interface GetProductType {
   products: ProductType[];
   totalPage: number;
@@ -14,12 +14,14 @@ export const ProductApi = createApi({
   // https://zrnvxy-8080.csb.app/
   // https://yymyxn-8080.csb.app/
   baseQuery: fetchBaseQuery({ baseUrl: `https://yymyxn-8080.csb.app/` }),
+  tagTypes: ["Cart", "Products"],
   endpoints: (builder) => ({
     getProducts: builder.query<
       GetProductType,
       { page: number; limit?: number }
     >({
       query: ({ page, limit = 4 }) => `products?_page=${page}&_limit=${limit}`,
+      providesTags: ["Products"],
       transformResponse: (products: ProductType[], meta) => {
         return {
           products,
@@ -29,13 +31,16 @@ export const ProductApi = createApi({
     }),
     getProduct: builder.query<ProductType, number>({
       query: (id) => `products/${id}`,
+      providesTags: ["Products"],
     }),
     searchProduct: builder.query<ProductType[], string>({
       query: (q) => `products?q=${q}`,
+      providesTags: ["Products"],
     }),
     getProductsCategory: builder.query<GetProductType, GetProductCategory>({
       query: ({ page, category }) =>
         `products?category=${category}&_page=${page}&_limit=8`,
+      providesTags: ["Products"],
       transformResponse: (products: ProductType[], meta) => {
         return {
           products,
@@ -48,6 +53,7 @@ export const ProductApi = createApi({
         `products?${
           detail !== "all" ? `detail=${detail}` : ""
         }&_page=${page}&_limit=8`,
+      providesTags: ["Products"],
       transformResponse: (products: ProductType[], meta) => {
         return {
           products,
@@ -55,8 +61,9 @@ export const ProductApi = createApi({
         };
       },
     }),
-    getCartUser: builder.query<orderInfo[], string | number>({
+    getCartUser: builder.query<OrderInfo[], string | number>({
       query: (id) => `orders?userId=${id}`,
+      providesTags: ["Cart"],
     }),
     orders: builder.mutation({
       query: (postData) => ({
@@ -64,6 +71,7 @@ export const ProductApi = createApi({
         method: "POST", // Specify the HTTP method
         body: postData, // Data you want to send in the body of the request
       }),
+      invalidatesTags: ["Cart"],
     }),
   }),
 });

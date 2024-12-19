@@ -40,7 +40,7 @@ function CartItem({ item }: { item: CartType }) {
           </Button>
         </div>
         <p className=" my-2">
-          Price: {(item.price * item.quantity).toLocaleString()}đ
+          Price:{item.quantity}x{item.price.toLocaleString()}đ
         </p>
         <Button
           size="small"

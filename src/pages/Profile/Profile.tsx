@@ -7,7 +7,7 @@ import {
   columns,
   columnsOrders,
 } from "../../components/ColumnsTable/ColumnsTable";
-import { orderInfo } from "../../types";
+import { OrderInfo } from "../../types";
 import { useGetCartUserQuery } from "../../redux/service/product.service";
 import { useAppSelector } from "../../hooks/reduxHook";
 import { UserInfo } from "../../types/Users.type";
@@ -22,7 +22,7 @@ function Profile() {
 
   const date =
     profile?.date_of_birth &&
-    new Date(profile?.date_of_birth).toLocaleDateString("pt-PT");
+    new Date(profile.date_of_birth).toLocaleDateString("pt-PT");
 
   const getUser = useCallback(async () => {
     try {
@@ -103,7 +103,7 @@ function Profile() {
         <ShoppingCartOutlined />
         <p className=" font-light ml-2">Your Order</p>
       </div>
-      <Table<orderInfo>
+      <Table<OrderInfo>
         columns={columnsOrders}
         dataSource={data}
         expandable={{

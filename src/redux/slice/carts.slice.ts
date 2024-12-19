@@ -30,6 +30,7 @@ export const CartSlice = createSlice({
       } else {
         cart.push(action.payload);
       }
+
       localStorage.setItem("cart", JSON.stringify(cart));
     },
     removeItem(state, action: PayloadAction<UpdateCartItemType>) {
@@ -55,6 +56,7 @@ export const CartSlice = createSlice({
         CartSlice.caseReducers.removeItem(state, action);
       }
       existingCart.quantity = existingCart?.quantity - 1;
+      existingCart.total = existingCart.quantity * existingCart.price;
       localStorage.setItem("cart", JSON.stringify(state.cart));
     },
     increaseItem(state, action: PayloadAction<UpdateCartItemType>) {
@@ -68,6 +70,7 @@ export const CartSlice = createSlice({
         return;
       }
       existingCart.quantity = existingCart?.quantity + 1;
+      existingCart.total = existingCart.quantity * existingCart.price;
       localStorage.setItem("cart", JSON.stringify(state.cart));
     },
     removeAllItems(state) {

@@ -9,7 +9,7 @@ export interface ProductType {
   size: string[];
 }
 
-export interface orderInfo {
+export interface OrderInfo {
   id: number;
   userId: string;
   email: string;
