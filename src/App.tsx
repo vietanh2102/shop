@@ -21,10 +21,10 @@ const Layout: FC<RouteType> = ({
   const RouteLayout: any = layout || DefaultLayout;
   const { token } = useAppSelector((state) => state.user.user);
   if (!token && isPrivateRoute) {
-    return <Navigate to={"/login"} />;
+    return <Navigate to={"/"} />;
   }
   if (token && isAuthRoute) {
-    return <Navigate to={"/"} />;
+    return <Navigate to={"/home"} />;
   }
   return (
     <RouteLayout>

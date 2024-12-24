@@ -9,7 +9,7 @@ import {
   RadioChangeEvent,
 } from "antd";
 import { ClockCircleOutlined, FormOutlined } from "@ant-design/icons";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { createRef, RefObject, useEffect, useState } from "react";
 import sizeImg from "../../assets/imgs/size.webp";
 import detailPage from "../../assets/imgs/detai-page_image_card.webp";
@@ -21,8 +21,9 @@ import { useGetProductQuery } from "../../redux/service/product.service";
 import instance from "../../axios/api";
 import { addCart } from "../../redux/slice/carts.slice";
 import { useAppDispatch } from "../../hooks/reduxHook";
-import ProductCard from "../../components/ProductCard/ProductCard";
+import ProductCard from "../../components/Card/ProductCard/ProductCard";
 import IntroProducts from "../../components/IntroProducts/IntroProducts";
+import { BREADCRUMB } from "../../constants/breadcrumbArr";
 function Product() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -83,17 +84,7 @@ function Product() {
     <div className="px-8 max-w-[1170px] mx-auto  lg:px-0">
       <Breadcrumb
         className="mb-6 mt-[104px]"
-        items={[
-          {
-            title: <Link to={"/"}>Home</Link>,
-          },
-          {
-            title: <Link to={"/products/all"}>All Products</Link>,
-          },
-          {
-            title: data?.title,
-          },
-        ]}
+        items={BREADCRUMB.detailProduct(data?.title)}
       />
       <div className="block lg:flex  ">
         <div className="w-full mx-auto md:w-3/5">

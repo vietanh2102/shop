@@ -1,11 +1,13 @@
-import { TableProps, Tag } from "antd";
+import { Button, Popconfirm, TableProps, Tag } from "antd";
 import { CartType, OrderInfo } from "../../types";
+import { CancelOrders } from "../../helpers/CancelOrder";
 
 export const statusOrder = {
   success: "success",
   processing: "processing",
   cancel: "error",
 };
+
 export const columns: TableProps<CartType>["columns"] = [
   {
     title: "Product",
@@ -54,7 +56,8 @@ export const columnsOrders: TableProps<OrderInfo>["columns"] = [
     title: "Address",
     dataIndex: "address",
     key: "address",
-    width: 150,
+    minWidth: 200,
+    render: (_, record) => <p className="line-clamp-1">{record.address}</p>,
   },
   {
     title: "Order At",
@@ -76,6 +79,25 @@ export const columnsOrders: TableProps<OrderInfo>["columns"] = [
             {status.toUpperCase()}
           </Tag>
         </>
+      );
+    },
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    width: 150,
+    fixed: "right",
+    render: (_, record) => {
+      return (
+        <Popconfirm
+          title="Sure to delete?"
+          onConfirm={() => CancelOrders(record)}
+          disabled={record.status !== statusOrder.processing}
+        >
+          <Button disabled={record.status !== statusOrder.processing}>
+            Cancel
+          </Button>
+        </Popconfirm>
       );
     },
   },

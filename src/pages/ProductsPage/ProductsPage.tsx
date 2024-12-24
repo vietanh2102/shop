@@ -1,10 +1,11 @@
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useGetProductsDetailQuery } from "../../redux/service/product.service";
-import ProductCard from "../../components/ProductCard/ProductCard";
+import ProductCard from "../../components/Card/ProductCard/ProductCard";
 import Loading from "../../components/Loading/Loading";
 import { Breadcrumb, Pagination } from "antd";
 import IntroProducts from "../../components/IntroProducts/IntroProducts";
 import FilterProducts from "../../components/FilterProducts/FilterProducts";
+import { BREADCRUMB } from "../../constants/breadcrumbArr";
 
 function ProductsPage() {
   const [searchParam, setSearchParam] = useSearchParams();
@@ -32,23 +33,7 @@ function ProductsPage() {
   }
   return (
     <div className="max-w-[1170px] mx-auto px-[32px] lg:p-0 mt-[112px]">
-      <Breadcrumb
-        items={[
-          {
-            title: <Link to={"/"}>Home</Link>,
-          },
-          {
-            title: <Link to={"/products/all"}>All Products</Link>,
-          },
-          {
-            title: (
-              <span className="uppercase">
-                {param === "all" ? "" : param === "long" ? "Denim" : param}
-              </span>
-            ),
-          },
-        ]}
-      />
+      <Breadcrumb items={BREADCRUMB.productsPage(param)} />
       <h2 className="mt-4 mb-4 font-semibold text-3xl">Products for you</h2>
       {/* {filter} */}
       <div className="flex mt-9 justify-between">

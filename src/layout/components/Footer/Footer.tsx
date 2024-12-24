@@ -1,6 +1,6 @@
 import { Input } from "antd";
 import { box, dola, headphone } from "../../../assets";
-import FooterCard from "../../../components/FooterCard/FooterCard";
+import FooterCard from "../../../components/Card/FooterCard/FooterCard";
 import { ArrowRightOutlined } from "@ant-design/icons";
 
 function Footer() {

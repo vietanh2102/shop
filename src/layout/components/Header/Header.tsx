@@ -16,12 +16,12 @@ import {
 } from "antd";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { CATEGORYPRODUCTS } from "../../../constants/products.constant";
-import CategoryCard from "../../../components/CategoryCard/CategoryCard";
+import CategoryCard from "../../../components/Card/CategoryCard/CategoryCard";
 import SearchDrawer from "../../../components/SearchDrawer/SearchDrawer";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHook";
 import { logoutUser } from "../../../redux/slice/user.slice";
-import CartItem from "../../../components/CartItem/CartItem";
+import CartItem from "../../../components/Card/CartItem/CartItem";
 import { linkItems } from "../../../components/DrawerLinkItems/DrawerLinkItems";
 
 function Header() {
@@ -89,7 +89,7 @@ function Header() {
         <ul className=" gap-8 text-lg font-semibold hidden md:flex">
           <li>
             <NavLink
-              to={"/"}
+              to={"/home"}
               className={({ isActive }) => (isActive ? "text-blue-600" : "")}
             >
               Home

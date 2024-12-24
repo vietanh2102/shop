@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { intro1, intro2, intro3 } from "../../assets";
-import CardIntro from "../CardIntro/CardIntro";
+import CardIntro from "../Card/CardIntro/CardIntro";
 
 function Intro() {
   return (

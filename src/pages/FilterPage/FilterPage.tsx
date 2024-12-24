@@ -1,5 +1,5 @@
-import { Link, useParams, useSearchParams } from "react-router-dom";
-import ProductCard from "../../components/ProductCard/ProductCard";
+import { useParams, useSearchParams } from "react-router-dom";
+import ProductCard from "../../components/Card/ProductCard/ProductCard";
 import Loading from "../../components/Loading/Loading";
 import { Breadcrumb, Pagination } from "antd";
 import IntroProducts from "../../components/IntroProducts/IntroProducts";
@@ -7,6 +7,7 @@ import FilterProducts from "../../components/FilterProducts/FilterProducts";
 import { useEffect, useState } from "react";
 import { ProductType } from "../../types";
 import instance from "../../axios/api";
+import { BREADCRUMB } from "../../constants/breadcrumbArr";
 
 function FilterPage() {
   const { param } = useParams();
@@ -53,19 +54,7 @@ function FilterPage() {
   }
   return (
     <div className="max-w-[1170px] mx-auto px-[32px] lg:p-0 mt-[112px]">
-      <Breadcrumb
-        items={[
-          {
-            title: <Link to={"/"}>Home</Link>,
-          },
-          {
-            title: <Link to={"/products/all"}>All Products</Link>,
-          },
-          {
-            title: <span>Filter</span>,
-          },
-        ]}
-      />
+      <Breadcrumb items={BREADCRUMB.FILTER} />
       <h2 className="mt-4 mb-4 font-semibold text-3xl">Result filter:</h2>
       {/* {filter} */}
       <div className="flex mt-9 justify-between">

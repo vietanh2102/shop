@@ -1,12 +1,12 @@
 import { Button } from "antd";
-import { CartType } from "../../types";
+import { CartType } from "../../../types";
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
-import { useAppDispatch } from "../../hooks/reduxHook";
+import { useAppDispatch } from "../../../hooks/reduxHook";
 import {
   deIncreaseItem,
   increaseItem,
   removeItem,
-} from "../../redux/slice/carts.slice";
+} from "../../../redux/slice/carts.slice";
 
 function CartItem({ item }: { item: CartType }) {
   const dispatch = useAppDispatch();

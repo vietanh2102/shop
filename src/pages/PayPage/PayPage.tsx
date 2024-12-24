@@ -1,6 +1,6 @@
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Button, Flex, Form, Input, message, Table } from "antd";
-import { CartType, RegisterType } from "../../types";
+import { CartType, OrderForm, OrderInfo } from "../../types";
 import { rules } from "../../rules";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHook";
 import { removeAllItems } from "../../redux/slice/carts.slice";
@@ -21,11 +21,9 @@ function PayPage() {
   }, [cart.cart]);
   const [form] = Form.useForm();
 
-  const handleClickOrder = async (
-    value: Omit<RegisterType, "password" | "confirmPassword">
-  ) => {
-    const orderInfo = {
-      userId: user.user.id,
+  const handleClickOrder = async (value: OrderForm) => {
+    const orderInfo: OrderInfo = {
+      userId: String(user.user.id),
       ...value,
       orderAt: new Date().toLocaleDateString("pt-PT"),
       status: "processing",

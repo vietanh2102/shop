@@ -22,13 +22,13 @@ const Login = lazy(() => import("../pages/Login/Login"));
 const Register = lazy(() => import("../pages/Register/Register"));
 
 const routes: RouteType[] = [
-  { path: "/", component: Home },
+  { path: "/home", component: Home },
   { path: `/products/:param`, component: ProductsPage },
   { path: `/filter/:param`, component: Filter },
   { path: `/product/:id`, component: DetailProduct },
   { path: "/contact", component: ContactPage },
   { path: "/about", component: AboutUs },
-  { path: "/login", component: Login, isAuthRoute: true },
+  { path: "/", component: Login, isAuthRoute: true },
   { path: "/register", component: Register, isAuthRoute: true },
   { path: "/pay", component: PayPage, isPrivateRoute: true },
   { path: "/profile", component: Profile, isPrivateRoute: true },

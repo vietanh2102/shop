@@ -12,11 +12,13 @@ import { useGetCartUserQuery } from "../../redux/service/product.service";
 import { useAppSelector } from "../../hooks/reduxHook";
 import { UserInfo } from "../../types/Users.type";
 import UpdateForm from "../../components/Form/UpdateForm/UpdateForm";
+import ChangePasswordForm from "../../components/Form/ChangePasswordForm/ChangePasswordForm";
 
 function Profile() {
   const [profile, setProfile] = useState<UserInfo>();
   const [loading, setLoading] = useState(false);
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
+  const [OpenModalChangePassword, setOpenModalChangePassword] = useState(false);
   const user = useAppSelector((state) => state.user.user);
   const { data, isFetching } = useGetCartUserQuery(user.id);
 
@@ -25,8 +27,8 @@ function Profile() {
     new Date(profile.date_of_birth).toLocaleDateString("pt-PT");
 
   const getUser = useCallback(async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const res = await userApiPrivate.get(`me`);
       setProfile(res.data.data);
     } catch (err) {
@@ -70,15 +72,37 @@ function Profile() {
           <p>{date}</p>
         </div>
       </div>
-      <div className="flex justify-center">
-        <Button
-          className="my-4"
-          type="primary"
-          onClick={() => setOpenModalUpdate(true)}
-        >
+      <div className="flex justify-center py-4 gap-2">
+        <Button onClick={() => setOpenModalChangePassword(true)}>
+          Change your password
+        </Button>
+        <Button type="primary" onClick={() => setOpenModalUpdate(true)}>
           Update Information
         </Button>
       </div>
+      <Modal
+        title="Change your password"
+        centered
+        open={OpenModalChangePassword}
+        onCancel={() => setOpenModalChangePassword(false)}
+        footer={(_, { CancelBtn }) => (
+          <>
+            <CancelBtn />
+            <Button
+              form="myChangePasswordForm"
+              key="submit"
+              htmlType="submit"
+              type="primary"
+            >
+              Update
+            </Button>
+          </>
+        )}
+      >
+        <ChangePasswordForm
+          setOpenModalChangePassword={setOpenModalChangePassword}
+        />
+      </Modal>
       <Modal
         title="Update information"
         centered
@@ -87,7 +111,12 @@ function Profile() {
         footer={(_, { CancelBtn }) => (
           <>
             <CancelBtn />
-            <Button form="myForm" key="submit" htmlType="submit" type="primary">
+            <Button
+              form="updateForm"
+              key="submit"
+              htmlType="submit"
+              type="primary"
+            >
               Update
             </Button>
           </>
@@ -106,6 +135,7 @@ function Profile() {
       <Table<OrderInfo>
         columns={columnsOrders}
         dataSource={data}
+        scroll={{ x: 1000 }}
         expandable={{
           expandedRowRender: (record) => (
             <Table

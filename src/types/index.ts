@@ -10,12 +10,12 @@ export interface ProductType {
 }
 
 export interface OrderInfo {
-  id: number;
   userId: string;
+  id: number;
+  address: string;
+  phone: string;
   email: string;
   name: string;
-  phone: string;
-  address: string;
   orderAt: string;
   status: string;
   carts: CartType[];
@@ -31,9 +31,12 @@ export interface RegisterType {
   password: string;
   confirmPassword: string;
 }
-export interface ProfileUser extends RegisterType {
+export interface OrderForm {
+  email: string;
+  name: string;
   id: number;
-  cart: CartType[];
+  address: string;
+  phone: string;
 }
 export interface User {
   id: number | string;

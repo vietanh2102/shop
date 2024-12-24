@@ -4,9 +4,9 @@ import { slice1, slice3 } from "../../assets";
 
 import HomeSlices from "../../components/HomeSlices/HomeSlices";
 import { useGetProductsQuery } from "../../redux/service/product.service";
-import ProductCard from "../../components/ProductCard/ProductCard";
+import ProductCard from "../../components/Card/ProductCard/ProductCard";
 import Intro from "../../components/Intro/Intro";
-import CategoryCard from "../../components/CategoryCard/CategoryCard";
+import CategoryCard from "../../components/Card/CategoryCard/CategoryCard";
 import {
   CATEGORYPRODUCTS,
   HOTPRODUCTS,

@@ -1,5 +1,5 @@
 import { aboutProduct, aboutUs, allProducts } from "../../assets";
-import CategoryCard from "../../components/CategoryCard/CategoryCard";
+import CategoryCard from "../../components/Card/CategoryCard/CategoryCard";
 import IntroProducts from "../../components/IntroProducts/IntroProducts";
 import { CATEGORYPRODUCTS } from "../../constants/products.constant";
 

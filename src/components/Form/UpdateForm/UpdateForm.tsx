@@ -3,6 +3,7 @@ import { userApiPrivate } from "../../../axios/userApi";
 import { rules } from "../../../rules";
 import { UserInfo } from "../../../types/Users.type";
 import { FC } from "react";
+import moment from "moment";
 interface Props {
   profile?: UserInfo;
   getUser: () => Promise<void>;
@@ -27,7 +28,7 @@ const UpdateForm: FC<Props> = ({ profile, getUser, setOpenModalUpdate }) => {
 
   return (
     <Form
-      id="myForm"
+      id="updateForm"
       form={form}
       layout="vertical"
       onFinish={handleClickUpdate}
@@ -40,13 +41,20 @@ const UpdateForm: FC<Props> = ({ profile, getUser, setOpenModalUpdate }) => {
       >
         <Input size="large" value={profile?.email} disabled={true} />
       </Form.Item>
-      <Form.Item name={"name"} label="Name" rules={rules.name} hasFeedback>
+      <Form.Item
+        name={"name"}
+        label="Name"
+        rules={rules.name}
+        hasFeedback
+        initialValue={profile?.name}
+      >
         <Input size="large" placeholder="Enter your name" />
       </Form.Item>
       <Form.Item
         name={"date_of_birth"}
         label="Date of birth"
         rules={rules.name}
+        initialValue={moment(profile?.date_of_birth)}
       >
         <DatePicker
           format={{
@@ -59,28 +67,19 @@ const UpdateForm: FC<Props> = ({ profile, getUser, setOpenModalUpdate }) => {
         name={"address"}
         label="Address"
         rules={rules.name}
+        initialValue={profile?.address}
         hasFeedback
       >
         <Input size="large" placeholder="Enter your address" />
       </Form.Item>
-      <Form.Item name={"phone"} label="Phone" rules={rules.phone} hasFeedback>
+      <Form.Item
+        name={"phone"}
+        label="Phone"
+        rules={rules.phone}
+        hasFeedback
+        initialValue={profile?.phone}
+      >
         <Input size="large" placeholder="Enter your phone" />
-      </Form.Item>
-      <Form.Item
-        name={"password"}
-        label={"Old Password"}
-        rules={rules.password}
-        hasFeedback
-      >
-        <Input.Password size="large" placeholder="Enter your Password" />
-      </Form.Item>
-      <Form.Item
-        name={"new_password"}
-        label={"New password"}
-        rules={rules.password}
-        hasFeedback
-      >
-        <Input.Password size="large" placeholder="Enter your Password" />
       </Form.Item>
     </Form>
   );

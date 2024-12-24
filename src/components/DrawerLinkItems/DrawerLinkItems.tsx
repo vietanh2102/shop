@@ -8,10 +8,10 @@ import {
 
 export const linkItems = [
   {
-    key: "/",
+    key: "/home",
     label: (
       <NavLink
-        to={"/"}
+        to={"/home"}
         className={({ isActive }) => (isActive ? "text-blue-600" : "")}
       >
         <HomeOutlined />

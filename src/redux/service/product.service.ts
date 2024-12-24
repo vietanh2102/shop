@@ -8,6 +8,7 @@ interface GetProductCategory {
   page: number;
   category?: string;
   detail?: string;
+  limit?: number;
 }
 export const ProductApi = createApi({
   reducerPath: "news",
@@ -16,10 +17,7 @@ export const ProductApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: `https://yymyxn-8080.csb.app/` }),
   tagTypes: ["Cart", "Products"],
   endpoints: (builder) => ({
-    getProducts: builder.query<
-      GetProductType,
-      { page: number; limit?: number }
-    >({
+    getProducts: builder.query<GetProductType, GetProductCategory>({
       query: ({ page, limit = 4 }) => `products?_page=${page}&_limit=${limit}`,
       providesTags: ["Products"],
       transformResponse: (products: ProductType[], meta) => {
@@ -62,14 +60,14 @@ export const ProductApi = createApi({
       },
     }),
     getCartUser: builder.query<OrderInfo[], string | number>({
-      query: (id) => `orders?userId=${id}`,
+      query: (id) => `orders?userId=${id}&_sort=status&_order=desc`,
       providesTags: ["Cart"],
     }),
-    orders: builder.mutation({
-      query: (postData) => ({
-        url: "orders", // The endpoint to which the POST request is made
-        method: "POST", // Specify the HTTP method
-        body: postData, // Data you want to send in the body of the request
+    orders: builder.mutation<OrderInfo, OrderInfo>({
+      query: (order) => ({
+        url: "orders",
+        method: "POST",
+        body: order,
       }),
       invalidatesTags: ["Cart"],
     }),
