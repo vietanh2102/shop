@@ -27,7 +27,7 @@ function Register() {
       <Form
         form={form}
         onFinish={handleCLickSubmit}
-        id="myForm"
+        id="myFormRegister"
         layout="vertical"
       >
         <Form.Item
@@ -55,7 +55,19 @@ function Register() {
         <Form.Item
           name="confirmPassword"
           label="Confirm Password"
-          rules={rules.password}
+          rules={[
+            ...rules.confirmPassword,
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("password") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("The new password that you entered do not match!")
+                );
+              },
+            }),
+          ]}
           hasFeedback
         >
           <Input.Password
@@ -64,7 +76,12 @@ function Register() {
           />
         </Form.Item>
       </Form>
-      <Button form="myForm" key="submit" htmlType="submit" type="primary">
+      <Button
+        form="myFormRegister"
+        key="submit"
+        htmlType="submit"
+        type="primary"
+      >
         Submit
       </Button>
     </div>

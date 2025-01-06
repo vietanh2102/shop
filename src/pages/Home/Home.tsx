@@ -1,4 +1,4 @@
-import { Carousel } from "antd";
+import { Carousel, Skeleton } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { slice1, slice3 } from "../../assets";
 
@@ -16,8 +16,18 @@ import { createRef, RefObject } from "react";
 import { Link } from "react-router-dom";
 
 function Home() {
-  const { data } = useGetProductsQuery({ page: 1 });
+  const { data, isLoading } = useGetProductsQuery({ page: 1 });
   const carouselRef: RefObject<CarouselRef> = createRef<CarouselRef>();
+  const CheckLoading = () => {
+    if (!isLoading) {
+      return data?.products.map((item) => (
+        <ProductCard product={item} key={item.id} />
+      ));
+    }
+    return Array.from({ length: 4 }, (_, i) => i + 1).map((item) => (
+      <Skeleton.Node active key={item} style={{ width: "100%", height: 348 }} />
+    ));
+  };
   return (
     <>
       <Carousel arrows autoplay>
@@ -45,9 +55,7 @@ function Home() {
           </p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {data?.products.map((item) => (
-            <ProductCard product={item} key={item.id} />
-          ))}
+          <CheckLoading />
         </div>
       </div>
       <div className="max-w-[1170px] mx-auto px-[32px] lg:p-0 my-16 relative">

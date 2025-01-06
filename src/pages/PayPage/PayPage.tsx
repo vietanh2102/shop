@@ -20,8 +20,14 @@ function PayPage() {
     return totalPrice;
   }, [cart.cart]);
   const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const handleClickOrder = async (value: OrderForm) => {
+    messageApi.open({
+      key: "ordering",
+      type: "loading",
+      content: "Loading...",
+    });
     const orderInfo: OrderInfo = {
       userId: String(user.user.id),
       ...value,
@@ -31,11 +37,23 @@ function PayPage() {
     };
     try {
       await Order(orderInfo).unwrap();
-      message.success("Order successful");
+      messageApi.open({
+        key: "ordering",
+        type: "success",
+        content: "Order successful!",
+        duration: 2,
+      });
+      // message.success("Order successful");
       form.resetFields();
       dispatch(removeAllItems());
     } catch (err) {
-      message.error("Try again");
+      messageApi.open({
+        key: "ordering",
+        type: "error",
+        content: "Try again",
+        duration: 2,
+      });
+      // message.error("Try again");
       console.error("Failed to save the post: ", err);
     }
   };
@@ -58,6 +76,7 @@ function PayPage() {
           <span className="text-red-400">{totalPrice.toLocaleString()}đ</span>
         </p>
       </div>
+      {contextHolder}
       <div className="my-8">
         <p className="text-[22px] font-bold my-8">Information:</p>
         <Form

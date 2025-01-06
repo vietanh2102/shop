@@ -134,7 +134,7 @@ function Header() {
           ) : (
             <div className="hidden md:flex gap-2">
               <Button>
-                <Link to={"/login"}>Login</Link>
+                <Link to={"/"}>Login</Link>
               </Button>
               <Button type="primary">
                 <Link to={"/register"}>Register</Link>

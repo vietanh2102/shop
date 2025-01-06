@@ -1,4 +1,4 @@
-import { Button, Popconfirm, TableProps, Tag } from "antd";
+import { Button, Popconfirm, Popover, TableProps, Tag } from "antd";
 import { CartType, OrderInfo } from "../../types";
 import { CancelOrders } from "../../helpers/CancelOrder";
 
@@ -44,7 +44,6 @@ export const columnsOrders: TableProps<OrderInfo>["columns"] = [
     title: "Name",
     dataIndex: "name",
     key: "name",
-    width: 150,
   },
   {
     title: "Phone",
@@ -57,7 +56,11 @@ export const columnsOrders: TableProps<OrderInfo>["columns"] = [
     dataIndex: "address",
     key: "address",
     minWidth: 200,
-    render: (_, record) => <p className="line-clamp-1">{record.address}</p>,
+    render: (_, record) => (
+      <Popover content={<p>{record.address}</p>}>
+        <p className="line-clamp-1">{record.address}</p>
+      </Popover>
+    ),
   },
   {
     title: "Order At",
@@ -89,15 +92,14 @@ export const columnsOrders: TableProps<OrderInfo>["columns"] = [
     fixed: "right",
     render: (_, record) => {
       return (
-        <Popconfirm
-          title="Sure to delete?"
-          onConfirm={() => CancelOrders(record)}
-          disabled={record.status !== statusOrder.processing}
-        >
-          <Button disabled={record.status !== statusOrder.processing}>
-            Cancel
-          </Button>
-        </Popconfirm>
+        record.status === statusOrder.processing && (
+          <Popconfirm
+            title="Sure to delete?"
+            onConfirm={() => CancelOrders(record)}
+          >
+            <Button>Cancel</Button>
+          </Popconfirm>
+        )
       );
     },
   },

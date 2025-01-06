@@ -9,43 +9,62 @@ interface Props {
 
 const ChangePasswordForm: FC<Props> = ({ setOpenModalChangePassword }) => {
   const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
   const handleClickChange = async (info: UserInfo) => {
+    messageApi.open({
+      key: "changePass",
+      type: "loading",
+      content: "Changing...",
+    });
     await userApiPrivate
       .put("user", info)
       .then(() => {
-        message.success("Change successful");
+        messageApi.open({
+          key: "changePass",
+          type: "success",
+          content: "Change successful",
+          duration: 2,
+        });
         setOpenModalChangePassword(false);
       })
       .catch((res) => {
         const messageRes = Object.values(res.response.data.data).toString();
-        message.error(messageRes);
+        messageApi.open({
+          key: "changePass",
+          type: "error",
+          content: messageRes,
+          duration: 2,
+        });
       });
   };
 
   return (
-    <Form
-      id="myChangePasswordForm"
-      form={form}
-      layout="vertical"
-      onFinish={handleClickChange}
-    >
-      <Form.Item
-        name={"password"}
-        label={"Old Password"}
-        rules={rules.password}
-        hasFeedback
+    <>
+      {contextHolder}
+      <Form
+        id="myChangePasswordForm"
+        form={form}
+        layout="vertical"
+        onFinish={handleClickChange}
       >
-        <Input.Password size="large" placeholder="Enter your old Password" />
-      </Form.Item>
-      <Form.Item
-        name={"new_password"}
-        label={"New password"}
-        rules={rules.password}
-        hasFeedback
-      >
-        <Input.Password size="large" placeholder="Enter your new Password" />
-      </Form.Item>
-    </Form>
+        <Form.Item
+          name={"password"}
+          label={"Old Password"}
+          rules={rules.password}
+          hasFeedback
+        >
+          <Input.Password size="large" placeholder="Enter your old Password" />
+        </Form.Item>
+        <Form.Item
+          name={"new_password"}
+          label={"New password"}
+          rules={rules.password}
+          hasFeedback
+        >
+          <Input.Password size="large" placeholder="Enter your new Password" />
+        </Form.Item>
+      </Form>
+    </>
   );
 };
 export default ChangePasswordForm;

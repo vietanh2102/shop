@@ -14,6 +14,10 @@ export const rules = {
       required: true,
       message: "Enter your username",
     },
+    {
+      min: 6,
+      message: "Username must be at least 6 characters",
+    },
   ],
   phone: [
     {
