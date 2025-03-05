@@ -1,17 +1,38 @@
+name: Deploy Code to GitHub Actions
+
+# Chạy workflow khi có sự thay đổi trong nhánh main
+on:
+  push:
+    branches:
+      - main
+
+# Các job sẽ được chạy
 jobs:
-  build:
+  deploy:
+    # Chạy trên môi trường Ubuntu
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      # Check out mã nguồn từ GitHub repository
+      - name: Checkout Code
+        uses: actions/checkout@v2
 
-      - name: Build project
-        run: |
-          mkdir -p build
-          echo "Hello World" > build/index.html
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      # Cài đặt Node.js (nếu bạn dùng Node.js, ví dụ vậy)
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          name: my-artifact
-          path: build/
+          node-version: "16" # Bạn có thể thay đổi phiên bản Node.js tại đây
+
+      # Cài đặt các dependencies (nếu bạn dùng npm)
+      - name: Install dependencies
+        run: npm install
+
+      # Chạy build (nếu bạn cần build code trước khi deploy)
+      - name: Build code
+        run: npm run build
+
+      # Triển khai ứng dụng lên môi trường (ví dụ: S3, Firebase, etc.)
+      - name: Deploy Application
+        run: |
+          echo "Deploying to production server..."
+          # Lệnh deploy của bạn ở đây (ví dụ như rsync, scp, Firebase deploy...)
