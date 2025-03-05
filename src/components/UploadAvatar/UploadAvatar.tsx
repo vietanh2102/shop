@@ -1,52 +1,64 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Image, Upload } from "antd";
-import type { GetProp, UploadFile, UploadProps } from "antd";
+import { message, Upload } from "antd";
+import type { UploadFile, UploadProps } from "antd";
 import { useState } from "react";
+import { userApiPrivate } from "../../axios/userApi";
+import { UploadRequestOption } from "rc-upload/lib/interface";
 
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
-
-const getBase64 = (file: FileType): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
-function UploadAvatar() {
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
+interface Props {
+  getUser: () => Promise<void>;
+}
+function UploadAvatar({ getUser }: Props) {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as FileType);
+  const handleChangeAvatar: UploadProps["onChange"] = (info) => {
+    const { file } = info;
+    if (file.status === "uploading") {
+      message.loading("Uploading...");
+    } else if (file.status === "done") {
+      message.success(`${file.name} đã tải lên thành công!`);
+    } else if (file.status === "error") {
+      message.error(`${file.name} tải lên thất bại.`);
     }
-
-    setPreviewImage(file.url || (file.preview as string));
-    setPreviewOpen(true);
+    setFileList([...info.fileList]);
   };
-
-  const handleChange: UploadProps["onChange"] = (info) => {
-    let newFileList = [...info.fileList];
-
-    // 1. Limit the number of uploaded files
-    // Only to show two recent uploaded files, and old ones will be replaced by the new
-    newFileList = newFileList.slice(-1);
-
-    // 2. Read from response and show file link
-    newFileList = newFileList.map((file) => {
-      if (file.response) {
-        // Component will show file.url as link
-        file.url = file.response.url;
-      }
-      return file;
-    });
-
-    setFileList(newFileList);
+  const customUploadAvatar = async ({
+    file,
+    onSuccess,
+    onError,
+  }: UploadRequestOption) => {
+    const formData = new FormData();
+    formData.append("image", file as Blob);
+    await userApiPrivate
+      .post("user/upload-avatar", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(async (res) => {
+        const url = "https://api-ecom.duthanhduoc.com/images/" + res.data.data;
+        await userApiPrivate
+          .put("user", { avatar: url })
+          .then((res) => {
+            if (onSuccess) {
+              onSuccess(res.data, file);
+            }
+            getUser();
+          })
+          .catch((res) => {
+            const messageRes = Object.values(res.response.data.data).toString();
+            message.error(messageRes);
+          });
+      })
+      .catch((error) => {
+        if (onError) {
+          onError(error);
+        }
+      });
   };
   const uploadButton = (
     <button type="button">
       <PlusOutlined />
-      <div className="mt-2">Upload</div>
+      <div className="mt-2">Change Avatar</div>
     </button>
   );
   return (
@@ -54,22 +66,11 @@ function UploadAvatar() {
       <Upload
         listType="picture-circle"
         fileList={fileList}
-        onPreview={handlePreview}
-        onChange={handleChange}
+        onChange={handleChangeAvatar}
+        customRequest={customUploadAvatar}
       >
         {uploadButton}
       </Upload>
-      {previewImage && (
-        <Image
-          wrapperStyle={{ display: "none" }}
-          preview={{
-            visible: previewOpen,
-            onVisibleChange: (visible) => setPreviewOpen(visible),
-            afterOpenChange: (visible) => !visible && setPreviewImage(""),
-          }}
-          src={previewImage}
-        />
-      )}
     </>
   );
 }

@@ -48,6 +48,10 @@ function Login() {
       <Button form="myForm" key="submit" htmlType="submit" type="primary">
         Login
       </Button>
+      <div className="mt-8">
+        <p>Email: vanh210211@gmail.com</p>
+        <p>Password: 0123456789</p>
+      </div>
     </div>
   );
 }

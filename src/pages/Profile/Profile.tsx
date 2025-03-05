@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { userApiPrivate } from "../../axios/userApi";
-import { Button, Modal, Table } from "antd";
+import { Button, Image, Modal, Table } from "antd";
 import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import Loading from "../../components/Loading/Loading";
 import {
@@ -13,6 +13,7 @@ import { useAppSelector } from "../../hooks/reduxHook";
 import { UserInfo } from "../../types/Users.type";
 import UpdateForm from "../../components/Form/UpdateForm/UpdateForm";
 import ChangePasswordForm from "../../components/Form/ChangePasswordForm/ChangePasswordForm";
+import UploadAvatar from "../../components/UploadAvatar/UploadAvatar";
 
 function Profile() {
   const [profile, setProfile] = useState<UserInfo>();
@@ -30,6 +31,7 @@ function Profile() {
     setLoading(true);
     try {
       const res = await userApiPrivate.get(`me`);
+      console.log(res.data.data);
       setProfile(res.data.data);
     } catch (err) {
       console.log(err);
@@ -52,27 +54,32 @@ function Profile() {
       </div>
       <div className="border">
         <div className="flex gap-4 ml-8 py-4 border-b">
-          <p className="font-bold">Email:</p>
+          <p className="font-bold w-[110px]">Email:</p>
           <p>{profile?.email}</p>
         </div>
         <div className="flex gap-4 ml-8 py-4 border-b">
-          <p className="font-bold">Name:</p>
+          <p className="font-bold w-[110px]">Name:</p>
           <p>{profile?.name}</p>
         </div>
         <div className="flex gap-4 ml-8 py-4 border-b">
-          <p className="font-bold">Phone:</p>
+          <p className="font-bold w-[110px]">Phone:</p>
           <p>{profile?.phone}</p>
         </div>
         <div className="flex gap-4 ml-8 py-4 border-b">
-          <p className="font-bold">Address:</p>
+          <p className="font-bold w-[110px]">Address:</p>
           <p>{profile?.address}</p>
         </div>
         <div className="flex gap-4 ml-8 py-4 border-b">
-          <p className="font-bold">Date of birth:</p>
+          <p className="font-bold w-[110px]">Date of birth:</p>
           <p>{date}</p>
         </div>
+        <div className="flex gap-4 py-4 ml-8 items-center ">
+          <p className="font-bold w-[110px]">Avatar:</p>
+          <Image src={profile?.avatar} width={200} />
+          <UploadAvatar getUser={getUser} />
+        </div>
       </div>
-      <div className="flex justify-center py-4 gap-2">
+      <div className="flex justify-center py-4 gap-4 items-center">
         <Button onClick={() => setOpenModalChangePassword(true)}>
           Change your password
         </Button>

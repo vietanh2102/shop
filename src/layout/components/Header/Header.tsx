@@ -1,5 +1,6 @@
 import {
   DownOutlined,
+  LogoutOutlined,
   MenuOutlined,
   ShoppingCartOutlined,
   UserOutlined,
@@ -52,11 +53,13 @@ function Header() {
     {
       label: <Link to={"/pay"}>Your order</Link>,
       key: "order",
+      icon: <ShoppingCartOutlined />,
     },
 
     {
       label: <Link to={"/"}>Logout</Link>,
       key: "logout",
+      icon: <LogoutOutlined />,
     },
   ];
   const handleCLickPay = () => {
