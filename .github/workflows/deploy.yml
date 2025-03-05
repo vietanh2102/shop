@@ -1,38 +1,56 @@
-name: Deploy Code to GitHub Actions
+name: Deploy static content to Pages
 
-# Chạy workflow khi có sự thay đổi trong nhánh main
 on:
+  # Runs on pushes targeting the default branch
   push:
-    branches:
-      - main
+    branches: ["main"]
 
-# Các job sẽ được chạy
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
+  # Single deploy job since we're just deploying
   deploy:
-    # Chạy trên môi trường Ubuntu
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-
     steps:
-      # Check out mã nguồn từ GitHub repository
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      # Cài đặt Node.js (nếu bạn dùng Node.js, ví dụ vậy)
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Set up Node
+        uses: actions/setup-node@v3
         with:
-          node-version: "16" # Bạn có thể thay đổi phiên bản Node.js tại đây
+          node-version: 18
+          cache: "npm"
 
-      # Cài đặt các dependencies (nếu bạn dùng npm)
       - name: Install dependencies
         run: npm install
 
-      # Chạy build (nếu bạn cần build code trước khi deploy)
-      - name: Build code
+      - name: Build
         run: npm run build
 
-      # Triển khai ứng dụng lên môi trường (ví dụ: S3, Firebase, etc.)
-      - name: Deploy Application
-        run: |
-          echo "Deploying to production server..."
-          # Lệnh deploy của bạn ở đây (ví dụ như rsync, scp, Firebase deploy...)
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload the build folder (adjust if needed)
+          path: "./dist" # Đảm bảo đây là thư mục chứa các file build của bạn
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
